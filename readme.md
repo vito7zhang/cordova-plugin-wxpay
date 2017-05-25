@@ -1,10 +1,10 @@
-#cordova-plugin-wxpay
+# cordova-plugin-wxpay
 
 这个是一个cordova插件，专用于iOS版本的微信支付。其实在做这个插件之前已经尝试使用过其他的Cordova微信支付插件了，可惜，微信支付的框架会经常发生。所以，如果一些插件库不经常更新的话，旧的插件会变得无法使用。
 
 所以，在这里写这个插件主要是尝试自己完成一个插件的开发。如果你之后需要用到这个插件，并且我不再更新了的话。相信自己，你也能够自己开发一个类似的插件。
 
-##主要文件介绍
+## 主要文件介绍
 插件目录：
 
 * src
@@ -18,7 +18,7 @@
 
 插件开发主要需要用到的文件需要用到上面的文件路径。我这个插件路径也是一样，可以作为参考（安卓不会，别问我）。。。
 
-###src文件
+### src文件
 主要有ios以及android两个文件夹，当然，cordova支持的其他平台也可以添加类似的文件夹来完成这个插件支持的平台。
 
 主要介绍ios下的，其实其他平台也类似，需要同事协助，当然你自己厉害，全部开发了也行。
@@ -40,12 +40,12 @@ ios下面，可以看到几个文件。
 
 现在来看一下四个自己编写的文件
 
-####AppleDelegate+CSDVWpay
+#### AppleDelegate+CSDVWpay
 如果做过iOS开发应该可以看得出来这个是一个AppDelegate的类目，他主要的工作是：通过runtime获得`-application:didFifnishLaunchimgWithOptions:`方法，为这个方法添加代码。添加的代码就是我们平常微信开发中的接入第一步了，在`-application:didFifnishLaunchimgWithOptions:`方法内向微信平台注册应用程序id。并且设置代理以及重写AppDelegate的handleOpenURL和openURL方法。
 
 **注意：上面这样做的原因是：我们无法直接将整个AppDelegate文件放入到我们的`src/ios`目录下面，因为这个目录下的文件其实都会在cordova构建ios应用程序的时候放入ios工程内，如果直接写一个AppDelegate文件，会产生两个相同文件的错误。**
 
-####CDVWxpay
+#### CDVWxpay
 这个类就是真正完成支付的类了。
 
 注意他的格式，他的父类应该是CDVPlugin。里面有`-payment`方法，通过js来调用，这个方法就是原生代码完成的微信支付了。可以直接根据微信Demo来模仿。在这个方法内需要注意，如果你想返回数据回到js当中，你需要放回一个CDVPluginResult的对象出去，具体返回可以看详细代码。
@@ -53,12 +53,12 @@ ios下面，可以看到几个文件。
 在这个类当中，还实现了WXApiDelegate，实现了页面回调。
 
 
-###www文件
+### www文件
 www文件里面主要存放js代码，这段js代码就是通过原生的代码来生成一个js对象的。当我们在cordova项目中使用这个js对象的时候，在平台下，他会根据你的配置文件（Plugin.xml）来调用具体的某个平台的某个类的某个方法。
 
 学过js都应该看得懂的，唯一有点不懂可能是`exec(success, fail, 'CDVWxpay', 'payment', option)`这一句。这句代码的几个参数，分别是成功回调方法，失败回调方法，调用原生代码的类名，原生类中的方法，以及参数。
 
-###plugin.xml
+### plugin.xml
 这个就是整个插件的配置文件了。一句句看
 
 plugin中id代表你插件名字，这个最好按照官方的命名方式`cordova-plugin-*`，version当然就是版本了。
@@ -78,7 +78,7 @@ plugin中id代表你插件名字，这个最好按照官方的命名方式`cordo
 	* config-file代表在plist或者在xml中添加节点，第一个config.xml代表在原生工程里面的info.plist文件加入的配置。第二个config.xml代表在cordova的配置文件`config.xml`内添加的配置。
 	
 	
-##Usage
+## Usage
 直接在cordova内引入，通过命令行添加这个插件
 
 `
@@ -114,12 +114,12 @@ wxpay.payment(function(msg){
 1. 由应用客户端向应用服务端发起请求生成支付订单
 2. 由应用服务端签名数据，向微信支付系统调用统一下单的API，然后返回预支付订单（prepay_id），然后再次签名数据后再返回给应用客户端。
 
-###TODO
+### TODO
 安卓版本
 
 支付宝支付插件
 
-###End
+### End
 这里仅仅做了的是cordova微信支付的的iOS端，android正在完善，不过文档应该也不会再写了，因为也是很类似的。
 
 除此之外，微信支付还需要应用客户端和应用服务器端做成功支付的校验。需要自己完善
