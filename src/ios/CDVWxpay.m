@@ -8,7 +8,12 @@
 
 #import "CDVWxpay.h"
 
+
+static CDVWxpay *wxpay = nil;
+
 @implementation CDVWxpay
+
+
 
 - (void)payment:(CDVInvokedUrlCommand *)command{
     [self.commandDelegate runInBackground:^{
@@ -93,9 +98,9 @@
         // save the callback id
         self.currentCallbackId = command.callbackId;
 
-        CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"调起成功"];
-
-        [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
+//        CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"调起成功"];
+//
+//        [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
     }];
 }
 
@@ -169,8 +174,9 @@
     }
     else{
         [self failWithCallbackID:self.currentCallbackId withMessage:message];
-    }
 
+    }
+    NSLog(@"message = %@",message);
     self.currentCallbackId = nil;
 }
 
@@ -225,6 +231,31 @@
 - (void)failWithCallbackID:(NSString *)callbackID withMessage:(NSString *)message{
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
     [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
+}
+
+
+
++(id)sharePay{
+    static dispatch_once_t token;
+    dispatch_once(&token,^{
+        if(wxpay == nil){
+            wxpay = [[CDVWxpay alloc]init];
+        }
+    } );
+    return wxpay;
+}
++(id)allocWithZone:(NSZone *)zone{
+    @synchronized(self){
+        if (!wxpay) {
+            wxpay = [super allocWithZone:zone]; //确保使用同一块内存地址
+            return wxpay;
+        }
+        return nil;
+    }
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+    return wxpay;
 }
 
 @end

@@ -68,15 +68,15 @@ void swizzleMethod(Class c, SEL originalSelector){
 
 
 -(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[CDVWxpay sharePay]];
 }
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[CDVWxpay sharePay]];
 }
 
 -(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[CDVWxpay sharePay]];
 }
 
 @end

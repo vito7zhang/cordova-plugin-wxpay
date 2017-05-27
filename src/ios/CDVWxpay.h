@@ -12,7 +12,7 @@
 #import "WXApiObject.h"
 
 @interface CDVWxpay:CDVPlugin <WXApiDelegate>
-
++(id)sharePay;
 @property (nonatomic, strong) NSString *currentCallbackId;
 @property (nonatomic, strong) NSString *wechatAppId;
 
